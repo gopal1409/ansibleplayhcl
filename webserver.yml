@@ -12,3 +12,7 @@
       yum:
         name: vsftpd
         state: latest
+    - name: install httpd
+      yum:
+        name: httpd
+        state: latest
