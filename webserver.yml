@@ -1,0 +1,14 @@
+---
+#every ansible playbook start with three dashes
+-
+#this minus in yaml indicate a list of items. the playbook contain a list
+#of play with each play as dictionary
+
+#Target: where our play will run 
+  hosts: worker
+  # task: the list of task that will be executed with in the play 
+  tasks:
+    - name: Install vsftpd package
+      yum:
+        name: vsftpd
+        state: latest
