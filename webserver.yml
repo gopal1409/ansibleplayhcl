@@ -8,25 +8,50 @@
   hosts: worker
   # task: the list of task that will be executed with in the play 
   tasks:
-    - name: Install vsftpd package
-      yum:
-        name: vsftpd
-        state: latest
     - name: install httpd
       yum:
         name: httpd
         state: latest
-    - name: start enable vsftpd
-      service:
-        name: vsftpd
-        state: started
-        enabled: true
     - name: start and enable httpd
       service:
         name: httpd
         state: started
         enabled: true
       notify: Start Apache
+    - name: install latest package of firewalld
+      yum:
+        name: firewalld
+        state: latest
+    - name: start and enable firewall
+      service:
+        name: firewalld
+        state: started
+        enabled: true  
+    - name: permit a rule in firewalld http
+      firewalld:
+        service: http
+        permanent: true
+        state: enable
+        immediate: yes
+    - name: create a simple html web page
+      copy:
+        content: "welcome to ansible learning module \n"
+        dest: /var/www/html/index.html
+    - name: Define a webserver name
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        line: ServerName www.client1.example.com:80
+        insertafter: "#ServerName"
+    - name: Update the entry in /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: 192.168.0.12 www.client1.example.com
+
+
+
+
+
+
   handlers:
     - name: Start Apache
       service:
