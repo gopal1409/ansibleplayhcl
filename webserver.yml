@@ -31,7 +31,7 @@
       firewalld:
         service: http
         permanent: true
-        state: enable
+        state: enabled
         immediate: yes
     - name: create a simple html web page
       copy:
