@@ -22,11 +22,13 @@
       yum:
         name: firewalld
         state: latest
+      
     - name: start and enable firewall
       service:
         name: firewalld
         state: started
         enabled: true  
+      notify: Firewall Started
     - name: permit a rule in firewalld http
       firewalld:
         service: http
@@ -47,12 +49,18 @@
         path: /etc/hosts
         line: 192.168.0.12 www.client1.example.com
 
-
-
-
-
-
   handlers:
+    - name: Firewall Started
+      mail:
+        host: smtp.gmail.com  
+        port: 587
+        username: gopal1409
+        password: xyz
+        sender: gopal1409@gmail.com
+        to: yum@gmail.com
+        subject: Report for {{ ansible_hostname }}
+        body: 'Server{{ ansible_hostname }} firewalld started'
+      delegate_to: localhost
     - name: Start Apache
       service:
         name: httpd
