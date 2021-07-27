@@ -26,3 +26,9 @@
         name: httpd
         state: started
         enabled: true
+      notify: Start Apache
+  handlers:
+    - name: Start Apache
+      service:
+        name: httpd
+        state: started      
