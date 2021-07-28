@@ -25,4 +25,15 @@
       ignore_errors: true
       register: reboot_check
     - debug: msg="{{reboot_check.stdout}}"  
-      
+    - name: Reboot the system after patching
+      shell: "shutdown -r now" 
+      async: 1
+      poll: 0
+    - name: wait for the system to come up
+      pause: 
+        minutes: 1
+    - name: new kernal version
+      shell: uname -r
+      register: new_ker
+    - debug: msg="new kernal version is {{new_ker.stdout}}and old kernel version was {{ curr_ker.stdout }}"  
+    
