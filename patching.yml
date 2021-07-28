@@ -19,3 +19,4 @@
     - name: Current Kernal Version
       shell: uname -r
       register: curr_ker
+    - debug: msg="{{curr_ker.stdout}}"
