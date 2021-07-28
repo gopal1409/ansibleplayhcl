@@ -7,31 +7,33 @@
 #Target: where our play will run 
   hosts: worker
   # task: the list of task that will be executed with in the play 
+  vars:
+    web_pkg: httpd
+    firewall_pkg: firewalld
+    perl_pkg: perl
+    rule: http
   tasks:
-    - name: install httpd
+    - name: install package
       yum:
-        name: httpd
+        name:
+          - "{{ web_pkg }}"
+          - "{{ firewall_pkg }}"
+          - "{{ perl_pkg }}"
         state: latest
     - name: start and enable httpd
       service:
-        name: httpd
+        name: "{{ web_pkg }}"
         state: started
-        enabled: true
-      notify: Start Apache
-    - name: install latest package of firewalld
-      yum:
-        name: firewalld
-        state: latest
-      
+        enabled: true 
     - name: start and enable firewall
       service:
-        name: firewalld
+        name: "{{ firewall_pkg }}"
         state: started
         enabled: true  
       notify: Firewall Started
     - name: permit a rule in firewalld http
       firewalld:
-        service: http
+        service: "{{ rule }}"
         permanent: true
         state: enabled
         immediate: yes
@@ -48,20 +50,3 @@
       lineinfile:
         path: /etc/hosts
         line: 192.168.0.12 www.client1.example.com
-
-  handlers:
-    - name: Firewall Started
-      mail:
-        host: smtp.gmail.com  
-        port: 587
-        username: gopal1409
-        password: xyz
-        sender: gopal1409@gmail.com
-        to: yum@gmail.com
-        subject: Report for {{ ansible_hostname }}
-        body: 'Server{{ ansible_hostname }} firewalld started'
-      delegate_to: localhost
-    - name: Start Apache
-      service:
-        name: httpd
-        state: started      
