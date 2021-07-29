@@ -9,3 +9,4 @@
   # task: the list of task that will be executed with in the play 
   roles:
   - web
+  - patch
