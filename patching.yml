@@ -18,7 +18,7 @@
       when: appr_proc_check.stdout == "process_running"
     - name: Intiate patching
       yum:
-        name: kernal
+        name: kernel
         state: latest
     - name: Current Kernal Version
       shell: uname -r
