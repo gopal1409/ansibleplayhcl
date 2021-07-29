@@ -16,6 +16,10 @@
       fail:
         msg="{{ inventory_hostname }} have running application please stop first then attempt patching"
       when: appr_proc_check.stdout == "process_running"
+    - name: Intiate patching
+      yum:
+        name: kernal
+        state: latest
     - name: Current Kernal Version
       shell: uname -r
       register: curr_ker
